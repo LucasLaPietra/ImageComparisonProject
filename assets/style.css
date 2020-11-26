@@ -1,0 +1,86 @@
+/* Custom App CSS Below --------------------------------- */
+
+/* Main Layout ––––––––––––––––––––––––––––––––––––––––––––––––––*/
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  padding: 2px;
+  border: solid 1px black;
+}
+
+.card-header{
+  background-color: #78c2ad;
+  text-align: center;
+  color:#ffffff;
+}
+
+.card-body {
+  background-color: #d3eae4;
+  text-align: center;
+}
+
+a {
+  color: #d8d8d8;
+}
+
+a:hover { 
+  color: #d8d8d8;
+}
+
+
+h1 {
+  font-weight: bold;
+  letter-spacing: 2.1px;
+  font-size: 21px;
+  color:#ffffff;
+}
+
+h2
+{
+  letter-spacing: 2px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+h3
+{
+  letter-spacing: 2px;
+  font-size: 18px;
+}
+
+h4
+{
+  letter-spacing: 2px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+h5
+{
+  letter-spacing: 2px;
+  font-size: 16px;
+  color:#ffffff;
+}
+p {
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.logo {
+width: 150px;
+padding: 10px;
+padding-right: 30px;
+}
+
+.pokemon {
+width: 150px;
+padding: 20px;
+}
+
+.imageRow{
+padding: 30px;
+text-align: center;
+}
