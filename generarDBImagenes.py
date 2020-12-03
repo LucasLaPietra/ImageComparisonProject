@@ -43,10 +43,9 @@ def tensorToString(embeddingsVector):
 def conectarAPostgres():
     conn = psycopg2.connect(
         host="localhost",
-        database="similitud",
+        database="proyectoGad",
         user="postgres",
         password="luxlp1996")
-
     return conn
 
 
@@ -64,6 +63,7 @@ def agregarImagenesaBD(path):
                 embeddingsVector = extraerVector(resizeImagen(imagen))
                 stringVector = tensorToString(embeddingsVector)
                 cr.execute('INSERT INTO imagenes (nombre,vector) VALUES (%s,%s);', [directorio, stringVector])
+        print(f'Vectores para {directorio} cargados con exito')
     conn.commit()
 
 def agregarPokemonaBD(path):
@@ -78,7 +78,7 @@ def agregarPokemonaBD(path):
             cr.execute('INSERT INTO pokemon (nombre,pathimagen) VALUES (%s,%s);', [directorio, pathimg])
     conn.commit()
 
-pathdatos=f'C:\PokemonImagen'
-pathimagenes=f'C:\PokemonData'
-#agregarImagenesaBD(pathdatos)
-#agregarPokemonaBD(pathimagenes)
+pathimagenes=f'C:\PokemonImagen'
+pathdatos=f'C:\PokemonData'
+agregarImagenesaBD(pathdatos)
+agregarPokemonaBD(pathimagenes)
