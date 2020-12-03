@@ -65,3 +65,20 @@ def agregarImagenesaBD(path):
                 stringVector = tensorToString(embeddingsVector)
                 cr.execute('INSERT INTO imagenes (nombre,vector) VALUES (%s,%s);', [directorio, stringVector])
     conn.commit()
+
+def agregarPokemonaBD(path):
+    conn = conectarAPostgres()
+    cr = conn.cursor()
+    dirs = os.listdir(path)
+    for directorio in dirs:
+        subpath = f'{path}\{directorio}'
+        subdirectorio = os.listdir(subpath)
+        for item in subdirectorio:
+            pathimg = f'{subpath}\{item}'
+            cr.execute('INSERT INTO pokemon (nombre,pathimagen) VALUES (%s,%s);', [directorio, pathimg])
+    conn.commit()
+
+pathdatos=f'C:\PokemonImagen'
+pathimagenes=f'C:\PokemonData'
+#agregarImagenesaBD(pathdatos)
+#agregarPokemonaBD(pathimagenes)
