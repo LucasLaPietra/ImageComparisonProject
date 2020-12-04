@@ -69,7 +69,7 @@ BODY = dbc.Container(
                         [
                             dbc.Row(
                                 dbc.Col([
-                                    html.Img(className="pokemon", src=app.get_asset_url("Unown-Question.png")),
+                                    html.Img(id='imagenPropia',className="pokemon",src=app.get_asset_url("Unown-Question.png")),
                                 ])
                             )
                         ])
@@ -83,7 +83,8 @@ BODY = dbc.Container(
                         [
                             dbc.Row(
                                 dbc.Col([
-                                    html.Img(className="pokemon", src=app.get_asset_url("Unown-Question.png"))
+                                    html.Img(id='imagenResultado',className="pokemon", src=app.get_asset_url("Unown-Question.png")),
+                                    html.H4(id='textoResultado',children='ninguna coincidencia')
                                 ])
                             )
                         ])
@@ -101,6 +102,18 @@ server = app.server
 app.layout = html.Div(children=[
     BarraSuperior,
     BODY])
+
+@app.callback(Output('imagenPropia', 'src'),
+              Input('upload-image', 'contents'),Input('upload-image', 'filename'))
+def update_graph(contents, filename):
+    if contents:
+        if filename.endswith('.jpg') or filename.endswith('.png'):
+            imagensubida=contents
+            return imagensubida
+        else:
+            imagennosubida= app.get_asset_url("Unown-Question.png")
+            return imagennosubida
+
 
 if __name__ == '__main__':
     app.run_server(debug=True, use_reloader=False)
