@@ -81,4 +81,4 @@ def agregarPokemonaBD(path):
 pathimagenes=f'C:\PokemonImagen'
 pathdatos=f'C:\PokemonData'
 agregarImagenesaBD(pathdatos)
-agregarPokemonaBD(pathimagenes)
+#agregarPokemonaBD(pathimagenes)

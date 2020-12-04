@@ -4,6 +4,7 @@ from dash.dependencies import Output, Input
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
+from metodos import extraerVector,tensorToString,resizeImagen,obtenerPokemonSimil
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.MINTY])
@@ -103,16 +104,20 @@ app.layout = html.Div(children=[
     BarraSuperior,
     BODY])
 
-@app.callback(Output('imagenPropia', 'src'),
+@app.callback([Output('imagenPropia', 'src'),Output('imagenResultado', 'src'),Output('textoResultado', 'children')],
               Input('upload-image', 'contents'),Input('upload-image', 'filename'))
 def update_graph(contents, filename):
     if contents:
         if filename.endswith('.jpg') or filename.endswith('.png'):
             imagensubida=contents
-            return imagensubida
-        else:
-            imagennosubida= app.get_asset_url("Unown-Question.png")
-            return imagennosubida
+            pokemonsimilar=obtenerPokemonSimil(contents)
+            imagenresultado=app.get_asset_url(pokemonsimilar[2])
+            textoresultado=pokemonsimilar[1]
+            return imagensubida,imagenresultado,textoresultado
+    else:
+        imagennosubida = app.get_asset_url("Unown-Question.png")
+        textoresultado = 'ninguna coincidencia'
+        return imagennosubida,imagennosubida,textoresultado
 
 
 if __name__ == '__main__':

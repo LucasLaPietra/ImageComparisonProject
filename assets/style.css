@@ -76,7 +76,8 @@ padding-right: 30px;
 }
 
 .pokemon {
-width: 256px;
+height: 256px;
+padding-bottom: 10px;
 }
 
 .imageRow{
