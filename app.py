@@ -112,7 +112,7 @@ def update_graph(contents, filename):
             imagensubida=contents
             pokemonsimilar=obtenerPokemonSimil(contents)
             imagenresultado=app.get_asset_url(pokemonsimilar[2])
-            textoresultado=pokemonsimilar[1]
+            textoresultado=f'Pokemon: {pokemonsimilar[1]}, Distancia:{pokemonsimilar[0]}'
             return imagensubida,imagenresultado,textoresultado
     else:
         imagennosubida = app.get_asset_url("Unown-Question.png")

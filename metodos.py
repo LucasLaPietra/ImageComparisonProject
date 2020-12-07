@@ -64,6 +64,7 @@ def obtenerPokemonSimil(imagen):
         distancia = dist.euclidean(embeddingsVector, i[2])
         listasimilaridades.append(distancia)
     minima = listaimagenes[listasimilaridades.index(min(listasimilaridades))]
+    minimadistancia = min(listasimilaridades)
     cr.execute('Select * from pokemon where pokemon.nombre = %s;', [minima[1]])
     resultado = cr.fetchall()
-    return resultado[0]
+    return (minimadistancia,resultado[0][1],resultado[0][2])
