@@ -1,6 +1,6 @@
 import pandas as pd
 import dash
-from dash.dependencies import Output, Input
+from dash.dependencies import Output, Input, State
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
@@ -85,7 +85,23 @@ BODY = dbc.Container(
                             dbc.Row(
                                 dbc.Col([
                                     html.Img(id='imagenResultado',className="pokemon", src=app.get_asset_url("Unown-Question.png")),
-                                    html.H4(id='textoResultado',children='ninguna coincidencia')
+                                    html.H4(id='textoResultado',children='ninguna coincidencia'),
+                                    html.Div(
+                                        [
+                                            dbc.Button(
+                                                "Ver 5 mas cercanos", id="popover-target"
+                                            ),
+                                            dbc.Popover(
+                                                [
+                                                    dbc.PopoverHeader("5 mas cercanos"),
+                                                    dbc.PopoverBody("Cargue una imagen para ver informacion", id="contenidopopover"),
+                                                ],
+                                                id="popover",
+                                                is_open=False,
+                                                target="popover-target",
+                                            ),
+                                        ]
+                                    )
                                 ])
                             )
                         ])
@@ -104,21 +120,37 @@ app.layout = html.Div(children=[
     BarraSuperior,
     BODY])
 
-@app.callback([Output('imagenPropia', 'src'),Output('imagenResultado', 'src'),Output('textoResultado', 'children')],
+@app.callback([Output('imagenPropia', 'src'),Output('imagenResultado', 'src'),Output('textoResultado', 'children'),
+               Output('contenidopopover', 'children')],
               Input('upload-image', 'contents'),Input('upload-image', 'filename'))
 def update_graph(contents, filename):
     if contents:
         if filename.endswith('.jpg') or filename.endswith('.png'):
             imagensubida=contents
             pokemonsimilar=obtenerPokemonSimil(contents)
-            imagenresultado=app.get_asset_url(pokemonsimilar[2])
-            textoresultado=f'Pokemon: {pokemonsimilar[1]}, Distancia:{pokemonsimilar[0]}'
-            return imagensubida,imagenresultado,textoresultado
+            imagenresultado=app.get_asset_url(pokemonsimilar[0][2])
+            textoresultado=f'Pokemon: {pokemonsimilar[0][1]}, Distancia:{pokemonsimilar[0][0]}'
+            textopopover = f'Pokemon: {pokemonsimilar[0][1]}, Distancia:{pokemonsimilar[0][0]} \n ' \
+                           f'Pokemon: {pokemonsimilar[1][1]}, Distancia:{pokemonsimilar[1][0]} \n' \
+                           f'Pokemon: {pokemonsimilar[2][1]}, Distancia:{pokemonsimilar[2][0]} \n' \
+                           f'Pokemon: {pokemonsimilar[3][1]}, Distancia:{pokemonsimilar[3][0]} \n' \
+                           f'Pokemon: {pokemonsimilar[4][1]}, Distancia:{pokemonsimilar[4][0]} \n'
+            return imagensubida,imagenresultado,textoresultado,textopopover
     else:
         imagennosubida = app.get_asset_url("Unown-Question.png")
         textoresultado = 'ninguna coincidencia'
-        return imagennosubida,imagennosubida,textoresultado
+        textopopover= 'Cargue una imagen para ver informacion'
+        return imagennosubida,imagennosubida,textoresultado,textopopover
 
+@app.callback(
+    Output("popover", "is_open"),
+    [Input("popover-target", "n_clicks")],
+    [State("popover", "is_open")],
+)
+def toggle_popover(n, is_open):
+    if n:
+        return not is_open
+    return is_open
 
 if __name__ == '__main__':
     app.run_server(debug=True, use_reloader=False)

@@ -57,14 +57,23 @@ def obtenerPokemonSimil(imagen):
     listasimilaridades=[]
     cr = conn.cursor()
     embeddingsVector = extraerVector(resizeImagen(imagen))
-    stringVector = tensorToString(embeddingsVector)
     cr.execute('Select * from imagenes;')
     listaimagenes = cr.fetchall()
     for i in listaimagenes:
         distancia = dist.euclidean(embeddingsVector, i[2])
         listasimilaridades.append(distancia)
-    minima = listaimagenes[listasimilaridades.index(min(listasimilaridades))]
-    minimadistancia = min(listasimilaridades)
-    cr.execute('Select * from pokemon where pokemon.nombre = %s;', [minima[1]])
-    resultado = cr.fetchall()
-    return (minimadistancia,resultado[0][1],resultado[0][2])
+    sorted_distancias = sorted(((v, i) for i, v in enumerate(listasimilaridades)))
+    listaresultados = []
+    listanombres = []
+    contador = 0
+    indice = 0
+    while contador <= 4:
+        if listaimagenes[sorted_distancias[indice][1]][1] not in listanombres:
+            cr.execute('Select * from pokemon where pokemon.nombre = %s;',
+                       [listaimagenes[sorted_distancias[indice][1]][1]])
+            resultado = cr.fetchall()
+            listaresultados.append((sorted_distancias[indice][0], resultado[0][1], resultado[0][2]))
+            listanombres.append(resultado[0][1])
+            contador += 1
+        indice += 1
+    return listaresultados
