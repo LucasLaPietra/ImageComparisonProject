@@ -117,7 +117,7 @@ BODY = dbc.Container(
 server = app.server
 
 app.layout = html.Div(children=[
-    BarraSuperior,
+    #BarraSuperior,
     BODY])
 
 @app.callback([Output('imagenPropia', 'src'),Output('imagenResultado', 'src'),Output('textoResultado', 'children'),

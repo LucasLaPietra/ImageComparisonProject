@@ -62,7 +62,7 @@ def agregarImagenesaBD(path):
                 imagen = Image.open(pathimg)
                 embeddingsVector = extraerVector(resizeImagen(imagen))
                 stringVector = tensorToString(embeddingsVector)
-                cr.execute('INSERT INTO imagenes (nombre,vector) VALUES (%s,%s);', [directorio, stringVector])
+                cr.execute('INSERT INTO imagenes (nombre,vector,pathimg) VALUES (%s,%s,%s);', [directorio, stringVector,pathimg])
         print(f'Vectores para {directorio} cargados con exito')
     conn.commit()
 

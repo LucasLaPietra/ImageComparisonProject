@@ -6,6 +6,7 @@ import base64
 from io import BytesIO
 import psycopg2
 import scipy.spatial.distance as dist
+import statistics
 
 def convertArray(numpyArray):
     newArray = []
@@ -69,11 +70,26 @@ def obtenerPokemonSimil(imagen):
     indice = 0
     while contador <= 4:
         if listaimagenes[sorted_distancias[indice][1]][1] not in listanombres:
+            '''
             cr.execute('Select * from pokemon where pokemon.nombre = %s;',
                        [listaimagenes[sorted_distancias[indice][1]][1]])
             resultado = cr.fetchall()
-            listaresultados.append((sorted_distancias[indice][0], resultado[0][1], resultado[0][2]))
-            listanombres.append(resultado[0][1])
+            '''
+            listaresultados.append((sorted_distancias[indice][0], listaimagenes[sorted_distancias[indice][1]][1], listaimagenes[sorted_distancias[indice][1]][3]))
+            listanombres.append(listaimagenes[sorted_distancias[indice][1]][1])
             contador += 1
         indice += 1
     return listaresultados
+
+def dimensionalidadintrinseca():
+    conn = conectarAPostgres()
+    cr = conn.cursor()
+    cr.execute('select vector from imagenes')
+    vectores = cr.fetchall()
+
+    distancias = []
+
+    for vector1 in vectores:
+        for vector2 in vectores:
+            distancias.append(dist.euclidean(vector1[0], vector2[0]))
+    return (statistics.mean(distancias)^2)/(2*statistics.variance(distancias))
